@@ -5,15 +5,20 @@ import java.util.Random;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.view.View;
+import android.widget.Toast;
 
 // 画面の描画クラス
 public class DrawableView extends View {
+	//獲得した得点表示用
+	private static final String POINTTXT = "得点：";
+
     // 円の直径
     private static final int DIAMETER = 50;
 
@@ -80,6 +85,9 @@ public class DrawableView extends View {
     // 落ちたボールの数
     private int fallCount;
 
+    //落ちたボールの得点計算
+    private int fallCountPoint;
+
     // 落ちたボールをストックする数
     private static final int FALL_BALL_STOCKS_SIZE = 20;
 
@@ -124,11 +132,19 @@ public class DrawableView extends View {
         // ボールの初期表示位置を画面外に設定
         movableBallX = -DIAMETER - 1;
         movableBallY = movableBallX;
+
     }
 
-    // onDrawメソッド(画面描画処理)
+
+
+	// onDrawメソッド(画面描画処理)
     @Override
     protected void onDraw(Canvas canvas) {
+
+        // 得点を画面に表示
+        Paint paint = new Paint();
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("点数:"+fallCountPoint, 20, 20, paint);
 
         // 画面描画領域
         int width = canvas.getWidth() - OFFSET_X;
@@ -161,7 +177,10 @@ public class DrawableView extends View {
             fallBallDrawables[fallCount] = ballDrawables;
 
             // 穴に落ちた回数を増加
-            fallCount++;
+            fallCount += fallCount;
+
+            //穴に1回落ちると得点を10点加算する
+            fallCountPoint = fallCount * 10;
 
             // 新しいボールを生成
             ballDrawables = new ShapeDrawable(new OvalShape());
@@ -174,6 +193,7 @@ public class DrawableView extends View {
             movableBallY = cY;
         }
 
+
         // ボールを画面に表示
         drawMovableBall(canvas, width, height, cX, cY);
 
@@ -181,7 +201,7 @@ public class DrawableView extends View {
         drawFallBall(canvas, width);
     }
 
-    // drawMovableBallメソッド(ボールの画面描画処理)
+	// drawMovableBallメソッド(ボールの画面描画処理)
     private void drawMovableBall(Canvas canvas, int width, int height, int cX,
         int cY) {
 

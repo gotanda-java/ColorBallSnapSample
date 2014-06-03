@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.TextView;
 
 // ゲーム画面Activity
 public class ColorBallSnapSampleActivity extends Activity {
@@ -80,9 +81,13 @@ public class ColorBallSnapSampleActivity extends Activity {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 // センサーが検知した値を取得
-                float x = event.values[SensorManager.DATA_X];
+            	/*以下は非推奨になった*/
+                /*float x = event.values[SensorManager.DATA_X];
                 float y = event.values[SensorManager.DATA_Y];
-                float z = event.values[SensorManager.DATA_Z];
+                float z = event.values[SensorManager.DATA_Z];*/
+            	float x = event.values[0];
+            	float y = event.values[1];
+            	float z = event.values[2];
 
                 // ローパスフィルタ処理(高周波振動(手の震えや微妙な振動の影響)を除去)
                 lowX = getLowPassFilterValue(x, lowX);
