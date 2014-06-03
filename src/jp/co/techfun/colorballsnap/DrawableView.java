@@ -43,6 +43,9 @@ public class DrawableView extends View {
 
     // 白玉を受ける穴の配列番号
     private static final int WHITE_OVAL = 3;
+    
+    // 黄玉を受ける穴の配列番号
+    private static final int YELLOW_OVAL = 4;
 
     // ボールの描画インスタンス
     private ShapeDrawable ballDrawables;
@@ -67,6 +70,9 @@ public class DrawableView extends View {
     private static final RadialGradient RADIAL_GRADIENT_WHITE =
         new RadialGradient(10, 10, RADIUS, Color.WHITE, Color.DKGRAY,
             Shader.TileMode.MIRROR);
+    private static final RadialGradient RADIAL_GRADIENT_YELLOW =
+        new RadialGradient(10, 10, RADIUS, Color.YELLOW, Color.YELLOW,
+                Shader.TileMode.MIRROR);
 
     // 落ちたボールの描画オブジェクト配列
     private ShapeDrawable[] fallBallDrawables;
@@ -90,6 +96,7 @@ public class DrawableView extends View {
         drawables[GREEN_OVAL] = new ShapeDrawable(new OvalShape());
         drawables[BLUE_OVAL] = new ShapeDrawable(new OvalShape());
         drawables[WHITE_OVAL] = new ShapeDrawable(new OvalShape());
+        drawables[YELLOW_OVAL] = new ShapeDrawable(new OvalShape());
 
         // 穴の色の設定
         drawables[RED_OVAL].getPaint().setShader(
@@ -104,6 +111,9 @@ public class DrawableView extends View {
         drawables[WHITE_OVAL].getPaint().setShader(
             new RadialGradient(25, 25, 20, Color.BLACK, Color.WHITE,
                 Shader.TileMode.MIRROR));
+        drawables[YELLOW_OVAL].getPaint().setShader(
+                new RadialGradient(25, 25, 20, Color.BLACK, Color.YELLOW,
+                    Shader.TileMode.MIRROR));
 
         // ボールの描画
         ballDrawables = new ShapeDrawable(new OvalShape());
@@ -272,6 +282,21 @@ public class DrawableView extends View {
         // 穴を表示
         drawables[WHITE_OVAL].setBounds(left, top, right, bottom);
         drawables[WHITE_OVAL].draw(canvas);
+        
+        
+     // てきとうな穴
+
+        // 始点(左上)の座標
+        left = OFFSET_X+500;
+        top = cY+300;
+
+        // 終点(右下)の座標
+        right = OFFSET_X+500 + DIAMETER;
+        bottom = cY+300 + DIAMETER;
+
+        // 穴を表示
+        drawables[YELLOW_OVAL].setBounds(left, top, right, bottom);
+        drawables[YELLOW_OVAL].draw(canvas);
     }
 
 
@@ -279,7 +304,7 @@ public class DrawableView extends View {
     private Shader getRandomRadialGradient() {
 
         // グラデーションの種類
-        final int type = 4;
+        final int type = 5;
         currentColor = new Random().nextInt(type);
 
         // ランダムにグラデーションの種類を選択
@@ -292,6 +317,9 @@ public class DrawableView extends View {
 
         case BLUE_OVAL:
             return RADIAL_GRADIENT_BLUE;
+        
+        case YELLOW_OVAL:
+            return RADIAL_GRADIENT_YELLOW;
 
         default:
             return RADIAL_GRADIENT_WHITE;
@@ -301,9 +329,9 @@ public class DrawableView extends View {
     // effectAccelarationメソッド(加速度の影響の反映処理)
     public void effectAccelaration(float x, float y, float z) {
         // 端末右側から受ける加速度を反映
-        movableBallX -= x * 2;
+        movableBallX -= x * 5;
 
         // 端末上側から受ける加速度を反映
-        movableBallY += y * 2;
+        movableBallY += y * 5;
     }
 }
