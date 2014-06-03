@@ -16,8 +16,6 @@ import android.widget.Toast;
 
 // 画面の描画クラス
 public class DrawableView extends View {
-	//獲得した得点表示用
-	private static final String POINTTXT = "得点：";
 
     // 円の直径
     private static final int DIAMETER = 50;
@@ -49,8 +47,8 @@ public class DrawableView extends View {
     // 白玉を受ける穴の配列番号
     private static final int WHITE_OVAL = 3;
 
-    // 黄玉を受ける穴の配列番号
-    private static final int YELLOW_OVAL = 4;
+    // 赤紫玉を受ける穴の配列番号
+    private static final int MAGENTA_OVAL = 4;
 
     // ボールの描画インスタンス
     private ShapeDrawable ballDrawables;
@@ -75,8 +73,8 @@ public class DrawableView extends View {
     private static final RadialGradient RADIAL_GRADIENT_WHITE =
         new RadialGradient(10, 10, RADIUS, Color.WHITE, Color.DKGRAY,
             Shader.TileMode.MIRROR);
-    private static final RadialGradient RADIAL_GRADIENT_YELLOW =
-            new RadialGradient(10, 10, RADIUS, Color.YELLOW, Color.WHITE,
+    private static final RadialGradient RADIAL_GRADIENT_MAGENTA =
+            new RadialGradient(10, 10, RADIUS, Color.WHITE, Color.MAGENTA,
                 Shader.TileMode.MIRROR);
 
     // 落ちたボールの描画オブジェクト配列
@@ -104,7 +102,7 @@ public class DrawableView extends View {
         drawables[GREEN_OVAL] = new ShapeDrawable(new OvalShape());
         drawables[BLUE_OVAL] = new ShapeDrawable(new OvalShape());
         drawables[WHITE_OVAL] = new ShapeDrawable(new OvalShape());
-        drawables[YELLOW_OVAL] = new ShapeDrawable(new OvalShape());
+        drawables[MAGENTA_OVAL] = new ShapeDrawable(new OvalShape());
 
         // 穴の色の設定
         drawables[RED_OVAL].getPaint().setShader(
@@ -119,8 +117,8 @@ public class DrawableView extends View {
         drawables[WHITE_OVAL].getPaint().setShader(
             new RadialGradient(25, 25, 20, Color.BLACK, Color.WHITE,
                 Shader.TileMode.MIRROR));
-        drawables[YELLOW_OVAL].getPaint().setShader(
-                new RadialGradient(25, 25, 20, Color.BLACK, Color.YELLOW,
+        drawables[MAGENTA_OVAL].getPaint().setShader(
+                new RadialGradient(25, 25, 20, Color.BLACK, Color.MAGENTA,
                     Shader.TileMode.MIRROR));
 
         // ボールの描画
@@ -135,16 +133,9 @@ public class DrawableView extends View {
 
     }
 
-
-
 	// onDrawメソッド(画面描画処理)
     @Override
     protected void onDraw(Canvas canvas) {
-
-        // 得点を画面に表示
-        Paint paint = new Paint();
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("点数:"+fallCountPoint, 20, 20, paint);
 
         // 画面描画領域
         int width = canvas.getWidth() - OFFSET_X;
@@ -177,7 +168,7 @@ public class DrawableView extends View {
             fallBallDrawables[fallCount] = ballDrawables;
 
             // 穴に落ちた回数を増加
-            fallCount += fallCount;
+            fallCount++;
 
             //穴に1回落ちると得点を10点加算する
             fallCountPoint = fallCount * 10;
@@ -199,6 +190,13 @@ public class DrawableView extends View {
 
         // 落ちたボールのストックを表示
         drawFallBall(canvas, width);
+
+        // 得点を画面に表示
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);				// 文字色
+        paint.setTextSize(30);                       // 文字サイズ
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("点数:"+fallCountPoint, 20, 100, paint);
     }
 
 	// drawMovableBallメソッド(ボールの画面描画処理)
@@ -300,8 +298,8 @@ public class DrawableView extends View {
         bottom = cY*2 + DIAMETER;
 
         // 穴を表示
-        drawables[YELLOW_OVAL].setBounds(left, top, right, bottom);
-        drawables[YELLOW_OVAL].draw(canvas);
+        drawables[MAGENTA_OVAL].setBounds(left, top, right, bottom);
+        drawables[MAGENTA_OVAL].draw(canvas);
 
         // 画面左端に白玉を受ける穴
 
@@ -337,8 +335,8 @@ public class DrawableView extends View {
         case BLUE_OVAL:
             return RADIAL_GRADIENT_BLUE;
 
-        case YELLOW_OVAL:
-            return RADIAL_GRADIENT_YELLOW;
+        case MAGENTA_OVAL:
+            return RADIAL_GRADIENT_MAGENTA;
 
         default:
             return RADIAL_GRADIENT_WHITE;
